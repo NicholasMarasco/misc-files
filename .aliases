@@ -30,6 +30,6 @@ alias gitrank="git ls-files | xargs -n1 git blame --line-porcelain | sed -n 's/^
 alias pushHeroku='git push ; git push heroku'
 
 # Fix console interface for python on Windows MINGW
-if [[ "$UNAME" == 'MINGW64_NT-10.0 ]]; then
+if [[ "$UNAME" == 'MINGW64_NT-10.0' ]]; then
   alias python='winpty python'
 fi

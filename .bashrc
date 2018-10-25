@@ -1,5 +1,5 @@
 # Bring in aliases
-source .aliases
+source ~/.aliases
 
 export set EDITOR='vi'
 export set VISUAL="$EDITOR"
