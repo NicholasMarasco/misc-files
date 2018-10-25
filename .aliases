@@ -1,0 +1,35 @@
+UNAME=`uname`
+
+if [ -x /usr/bin/dircolors ]; then
+  alias ls='ls --color=auto'
+  alias dir='dir --color=auto'
+  alias vdir='vdir --color=auto'
+
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias la='ls -A'
+alias ll='ls -l'
+
+# lazy aliases
+alias :q='exit'
+alias :Q=':q'
+alias :Q!=':q!'
+alias vi='vi -p'
+alias tmux='tmux -2'
+
+# Java aliases
+alias jcompa='javac *.java'
+alias jclean='rm *.class'
+
+# Git aliases
+alias gitrank="git ls-files | xargs -n1 git blame --line-porcelain | sed -n 's/^author //p' | sort -f | uniq -ic | sort -nr"
+alias pushHeroku='git push ; git push heroku'
+
+# Fix console interface for python on Windows MINGW
+if [[ "$UNAME" == 'MINGW64_NT-10.0 ]]; then
+  alias python='winpty python'
+fi
