@@ -26,7 +26,7 @@ alias jcompa='javac *.java'
 alias jclean='rm *.class'
 
 # Git aliases
-alias gitroot="cd `git rev-parse --show-toplevel`"
+alias gitroot='cd `git rev-parse --show-toplevel`'
 alias gitrank="git ls-files | xargs -n1 git blame --line-porcelain | sed -n 's/^author //p' | sort -f | uniq -ic | sort -nr"
 alias pushHeroku='git push ; git push heroku'
 
