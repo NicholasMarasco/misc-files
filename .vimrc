@@ -1,3 +1,9 @@
+" Load pathogen
+execute pathogen#infect()
+
+" Include functions
+source ~/.vimfunc
+
 " General
 set history=500     " set number of history lines to remember
 filetype indent on  " load filetype specific indent files
@@ -103,6 +109,7 @@ noremap <silent> g- :<C-B>sil <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>/
 " Change directory into one that the file is in
 autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
 " Remove trailing whitespace in file
-autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+autocmd FileType markdown let b:noStripWhitespace=1
+autocmd BufWritePre * call StripTrailingWhitespace()
 "}
 autocmd BufRead * retab
