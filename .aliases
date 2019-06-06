@@ -26,11 +26,15 @@ alias jcompa='javac *.java'
 alias jclean='rm *.class'
 
 # Git aliases
-alias gitroot='cd `git rev-parse --show-toplevel`'
+alias gitroot="cd `git rev-parse --show-toplevel`"
 alias gitrank="git ls-files | xargs -n1 git blame --line-porcelain | sed -n 's/^author //p' | sort -f | uniq -ic | sort -nr"
 alias pushHeroku='git push ; git push heroku'
 
 # Fix console interface for python on Windows MINGW
 if [[ "$UNAME" == 'MINGW64_NT-10.0' ]]; then
   alias python='winpty python'
+# default to python 3
+elif [[ "$UNAME" == 'Linux' ]]; then
+  alias python='python3'
+  alias pip='pip3'
 fi
