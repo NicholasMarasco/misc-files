@@ -1,20 +1,88 @@
-" Load pathogen
-execute pathogen#infect()
+" Use Vim settings instead of Vi
+" This isn't even necessary in most cases
+set nocompatible
 
-" Include functions
-source ~/.vimfunc
+" === Pathogen ===
+try
+  execute pathogen#infect()
+endtry
 
-" General
-set history=500     " set number of history lines to remember
+" === Vundle (Eventually) ===
+if filereadable(expand("~/.vim/vundles.vim"))
+  source ~/.vim/vundles.vim
+endif
+autocmd BufNewFile,BufRead *.vundle set filetype=vim
+
+" Import user defined functions if available
+if filereadable(expand("~/.vimfunc"))
+  source ~/.vimfunc
+endif
+
+" === General ===
+set number                     " show line numbers
+set backspace=eol,start,indent " allow backspace in insert mode
+set history=1000               " how much cmdline history to keep
+set showcmd                    " show command in bottom bar
+set showmode                   " show current mode at bottom
+set guicursor=a:blinkon0       " no cusor blink
+set noerrorbells               " no error notifications
+set visualbell                 " no sounds
+set t_vb=                      " no terminal visualbell
+set autoread                   " reload file when changed externally
+set hidden                     " hide buffers from view
+
+let mapleader=","              " more easily accessible leader
+
+" === Turn Off Swap Files ===
+set noswapfile
+set nobackup
+set nowritebackup
+
+" === Syntax Highlighting ===
+syntax on                      " set syntax highlighting
+set background=dark            " dark default for no colorscheme
+try
+  colorscheme best             " set custom colorscheme if exists
+endtry
+
+" === Persistent Undo ===
+" Keep undo across sessions
+if has('persistent_undo') && isdirectory(expand('~').'/.vim/backups')
+  silent !mkdir ~/.vim/backups > /dev/null 2>&1
+  set undodir=~/.vim/backups
+  set undofile
+endif
+
+" === Indentation ===
+set autoindent
+set smartindent
+set smarttab
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+set expandtab
+" au! FileType python setl nosi " turn off smart indent for python
+
+" Auto indent pasted text
+nnoremap p p=`]<C-O>
+nnoremap P P=`]<C-O>
+
 filetype indent on  " load filetype specific indent files
 filetype plugin on  " load filetype specific plugin files
-set autoread        " auto read when file is changed externally
+
+" Display tabs and trailing spaces visually
+set list listchars=tab:\ \ ,trail:·
+
+set nowrap          " don't hard wrap lines
+set linebreak       " wrap lines at convenient places
+set textwidth=71    " specificaly around this width
+
+
+
+
 
 " UI Config
-set nocompatible    " generally not necessary
-set number          " show line numbers
 set ruler           " show column and row numbers
-set showcmd         " show command in bottom bar
 set cursorline      " highlight current line
 set scrolloff=10    " keep 10 lines above and below cursor
 set wildmenu        " visual autocomplete
@@ -24,19 +92,12 @@ set mouse=a         " enable mouse by default
 set incsearch       " jump to search word as typed
 set ignorecase      " ignore case when searching
 set smartcase       " no ignorecase when capital is used
-set hid             " hide buffer when not used
 set fdm=marker      " marker method folding
 " indent folding for python
 au! FileType python set fdm=indent
 set foldnestmax=2   " don't fold too deep
 
-" no error sounds/effects
-set noerrorbells
-set novisualbell
-set t_vb=
-set tm=500
 " make backspace work like other editors
-set backspace=eol,start,indent
 " cursor moving can wrap to next line
 set whichwrap+=<,>,h,l
 "
@@ -53,33 +114,15 @@ nnoremap <space> za
 vnoremap <space> zf
 
 nnoremap <F3> :wq<CR>
+nnoremap gf <C-w>gf
 
 " ignore files that I never want to edit in vim
 set wildignore=*.class,*.o,*.obj,*.png,*.jpg,*.pyc,*.pdf,*.ods,*.zip,*.tar,*.odt
-
-syntax enable       " set syntax highlighting
-try
-  colorscheme best  " try to set colorscheme
-  set background=dark
-catch
-  set background=dark " darken background
-endtry
-
-set noswapfile      " swap files are annoying
-
-" Spaces and Tabs
-set expandtab       " tabs are spaces
-set shiftwidth=2    " number of spaces used in auto indent
-set tabstop=2       " number of spaces per tab
-set softtabstop=2   " number of spaces in tab when editing
 
 " linebreak at 80 characters
 set lbr
 set tw=80
 
-set ai " auto indent
-set si " smart indent
-au! FileType python setl nosi " turn off smart indent for python
 set wrap " wrap lines
 
 " Commands
