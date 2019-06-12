@@ -2,50 +2,70 @@
 " This isn't even necessary in most cases
 set nocompatible
 
-" === Pathogen ===
+" ========== Pathogen ==========
 try
   execute pathogen#infect()
 endtry
 
-" === Vundle (Eventually) ===
+" ========== Vundle (Eventually) ==========
 if filereadable(expand("~/.vim/vundles.vim"))
   source ~/.vim/vundles.vim
 endif
 autocmd BufNewFile,BufRead *.vundle set filetype=vim
 
 " Import user defined functions if available
-if filereadable(expand("~/.vimfunc"))
-  source ~/.vimfunc
+if filereadable(expand("~/.vim/.vimfunc"))
+  source ~/.vim/.vimfunc
 endif
 
-" === General ===
+" ========== General ==========
 set number                     " show line numbers
+set cursorline                 " highlight current line
 set backspace=eol,start,indent " allow backspace in insert mode
+set whichwrap+=<,>,h,l         " cursor moving can wrap
 set history=1000               " how much cmdline history to keep
 set showcmd                    " show command in bottom bar
 set showmode                   " show current mode at bottom
+set showmatch                  " highlight matching braces
 set guicursor=a:blinkon0       " no cusor blink
 set noerrorbells               " no error notifications
 set visualbell                 " no sounds
 set t_vb=                      " no terminal visualbell
 set autoread                   " reload file when changed externally
 set hidden                     " hide buffers from view
+set lazyredraw                 " redraw only when needed
+set mouse=a                    " enable mouse by default
+set formatoptions-=o           " don't continue comments on pushing /O
 
 let mapleader=","              " more easily accessible leader
 
-" === Turn Off Swap Files ===
+" ========== Status Line Config ==========
+" outsourced to a file because it was large and unsightly
+if filereadable(expand("~/.vim/.vimsline"))
+  source ~/.vim/.vimsline
+endif
+
+" Recalculate warnings while idle and after saving
+au CursorHold,BufWritePost * unlet! b:statusline_tab_warning
+au CursorHold,BufWritePost * unlet! b:statusline_trailing_space_warning
+au CursorHold,BufWritePost * unlet! b:statusline_long_line_warning
+
+" ========== Turn Off Swap Files ==========
 set noswapfile
 set nobackup
 set nowritebackup
 
-" === Syntax Highlighting ===
+" ========== Syntax Highlighting ==========
 syntax on                      " set syntax highlighting
 set background=dark            " dark default for no colorscheme
 try
   colorscheme best             " set custom colorscheme if exists
 endtry
 
-" === Persistent Undo ===
+" Attempt at arm syntax highlighting
+au BufRead,BufNewFile *.s,*.S set filetype=arm " arm = armv7/7
+
+" ========== Persistent Undo ==========
 " Keep undo across sessions
 if has('persistent_undo') && isdirectory(expand('~').'/.vim/backups')
   silent !mkdir ~/.vim/backups > /dev/null 2>&1
@@ -53,7 +73,7 @@ if has('persistent_undo') && isdirectory(expand('~').'/.vim/backups')
   set undofile
 endif
 
-" === Indentation ===
+" ========== Indentation ==========
 set autoindent
 set smartindent
 set smarttab
@@ -67,40 +87,47 @@ set expandtab
 nnoremap p p=`]<C-O>
 nnoremap P P=`]<C-O>
 
-filetype indent on  " load filetype specific indent files
-filetype plugin on  " load filetype specific plugin files
+filetype indent on             " load filetype specific indent files
+filetype plugin on             " load filetype specific plugin files
 
 " Display tabs and trailing spaces visually
-set list listchars=tab:\ \ ,trail:·
+set list listchars=tab:▷·,trail:·,nbsp:·
 
-set nowrap          " don't hard wrap lines
-set linebreak       " wrap lines at convenient places
-set textwidth=71    " specificaly around this width
+set nowrap                     " don't hard wrap lines
+set linebreak                  " wrap lines at convenient places
+set textwidth=71               " specificaly around this width
 
+" ========== Folding ==========
+set foldmethod=indent          " fold based on indentation
+set foldnestmax=3              " only fold 3 levels deep
+set nofoldenable               " don't fold by default
 
+" Space for easy folding
+nnoremap <space> za
+vnoremap <space> zf
 
+" ========== Tab Completion ==========
+set wildmode=list:longest
+set wildmenu                   " allow ctrl+n and ctrl+p for scrolling
+" Set which filetypes to ignore while completing
+set wildignore=*.o,*.obj,*.class,*.pyc
+set wildignore+=*.zip,*.tar
+set wildignore+=*.pdf,*.ods,*.odt
+set wildignore+=*.png,*.jpg,*.gif
+set wildignore+=*~,__pycache__/**
 
+" ========== Scrolling ==========
+set scrolloff=10                " keep 10 lines on the screen
+set sidescrolloff=15            " keep 15 columns on the screen
+set sidescroll=1
 
-" UI Config
-set ruler           " show column and row numbers
-set cursorline      " highlight current line
-set scrolloff=10    " keep 10 lines above and below cursor
-set wildmenu        " visual autocomplete
-set lazyredraw      " redraw only when needed
-set showmatch       " highlight matching braces
-set mouse=a         " enable mouse by default
-set incsearch       " jump to search word as typed
-set ignorecase      " ignore case when searching
-set smartcase       " no ignorecase when capital is used
-set fdm=marker      " marker method folding
-" indent folding for python
-au! FileType python set fdm=indent
-set foldnestmax=2   " don't fold too deep
+" ========== Search ==========
+set incsearch                   " find match while typing
+set hlsearch                    " highlight searches
+set ignorecase                  " ignore case while typing
+set smartcase                   " unless a capital is typed
 
-" make backspace work like other editors
-" cursor moving can wrap to next line
-set whichwrap+=<,>,h,l
-"
+" ========== Misc Mappings ==========
 " make vim regex act more like perl
 nnoremap / /\v
 vnoremap / /\v
@@ -109,34 +136,32 @@ cnoremap \>s/ \>smagic/
 nnoremap :g/ :g/\v
 nnoremap :g// :g//
 
-" Space for easy folding
-nnoremap <space> za
-vnoremap <space> zf
-
-nnoremap <F3> :wq<CR>
-nnoremap gf <C-w>gf
-
-" ignore files that I never want to edit in vim
-set wildignore=*.class,*.o,*.obj,*.png,*.jpg,*.pyc,*.pdf,*.ods,*.zip,*.tar,*.odt
-
-" linebreak at 80 characters
-set lbr
-set tw=80
-
-set wrap " wrap lines
-
-" Commands
-command Q q         " I'm lazy so I fix typos
+" typo correction instead of typing better
+command Q q
 command W w
 command Wq wq
 command WQ wq
 
-" Attempt at arm syntax highlighting
-au BufRead,BufNewFile *.s,*.S set filetype=arm " arm = armv7/7
+" make wrapped lines easier to navigate
+noremap <silent> k gk
+noremap <silent> j gj
+noremap <silent> 0 g0
+noremap <silent> $ g$
 
+" unmap arrow key in normal mode to enforce better habits
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
+
+nnoremap <F3> :wq<CR>          " ibm habits die hard
+noremap gf <C-W>gf             " open file in new tab
+
+" ========== Misc Autocommands ==========
 " Automatically comment out lines
 au FileType c,cpp,java,javascript,cs let b:comment_leader = '// '
-au FileType bash,zsh,sh,python,perl,make,conf,gitcommit let b:comment_leader = '# '
+au FileType bash,zsh,sh,python,perl let b:comment_leader = '# '
+au FileType make,conf,gitcommit let b:comment_leader = '# '
 au FileType haskell,vhdl,ada let b:comment_leader = '-- '
 au FileType vim let b:comment_leader = '" '
 au FileType tex let b:comment_leader = '% '
@@ -144,15 +169,13 @@ au FileType fortran,xdefaults let b:comment_leader = '! '
 if !exists("b:comment_leader")
   let b:comment_leader = '# ' " common default
 endif
-noremap <silent> g/ :<C-B>sil <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:noh<CR>
-noremap <silent> g- :<C-B>sil <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:noh<CR>
+noremap <silent> g/ :call CommentLine()<CR>
+noremap <silent> g- :call UncommentLine()<CR>
 
-" Auto commands
-"{
 " Change directory into one that the file is in
 autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
 " Remove trailing whitespace in file
 autocmd FileType markdown let b:noStripWhitespace=1
 autocmd BufWritePre * call StripTrailingWhitespace()
-"}
+" Fix tabbing when opening file
 autocmd BufRead * retab
