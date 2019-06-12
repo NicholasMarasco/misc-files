@@ -37,6 +37,7 @@ set hidden                     " hide buffers from view
 set lazyredraw                 " redraw only when needed
 set mouse=a                    " enable mouse by default
 set formatoptions-=o           " don't continue comments on pushing /O
+set nostartofline              " don't jump to column 0 when possible
 
 let mapleader=","              " more easily accessible leader
 
@@ -82,6 +83,10 @@ set shiftwidth=2
 set softtabstop=2
 set tabstop=2
 set expandtab
+
+" Makefiles require tabs, so don't expand
+autocmd FileType make setlocal noexpandtab
+
 " au! FileType python setl nosi " turn off smart indent for python
 
 " Auto indent pasted text
@@ -157,6 +162,8 @@ noremap <Right> <nop>
 
 nnoremap <F3> :wq<CR>          " ibm habits die hard
 noremap gf <C-W>gf             " open file in new tab
+" Clear highlighting with a redraw
+noremap <silent> <C-L> :nohlsearch<CR><C-L>
 
 " ========== Misc Autocommands ==========
 " Automatically comment out lines
