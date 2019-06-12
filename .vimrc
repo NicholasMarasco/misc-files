@@ -20,6 +20,7 @@ endif
 
 " ========== General ==========
 set number                     " show line numbers
+set relativenumber             " show relative line numbers
 set cursorline                 " highlight current line
 set backspace=eol,start,indent " allow backspace in insert mode
 set whichwrap+=<,>,h,l         " cursor moving can wrap
