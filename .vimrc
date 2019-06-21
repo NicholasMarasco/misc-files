@@ -13,10 +13,12 @@ if filereadable(expand("~/.vim/vundles.vim"))
 endif
 autocmd BufNewFile,BufRead *.vundle set filetype=vim
 
+" ========== User functions ==========
 " Import user defined functions if available
 if filereadable(expand("~/.vim/.vimfunc"))
   source ~/.vim/.vimfunc
 endif
+autocmd BufNewFile,BufRead .vimfunc set filetype=vim
 
 " ========== General ==========
 set number                     " show line numbers
@@ -46,6 +48,7 @@ let mapleader=","              " more easily accessible leader
 if filereadable(expand("~/.vim/.vimsline"))
   source ~/.vim/.vimsline
 endif
+autocmd BufNewFile,BufRead .vimsline set filetype=vim
 
 " Recalculate warnings while idle and after saving
 au CursorHold,BufWritePost * unlet! b:statusline_tab_warning
@@ -87,6 +90,7 @@ set expandtab
 " Makefiles require tabs, so don't expand
 autocmd FileType make setlocal noexpandtab
 
+" I had this on for some reason before, I don't remember why
 " au! FileType python setl nosi " turn off smart indent for python
 
 " Auto indent pasted text
@@ -160,7 +164,11 @@ noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
 
+" function key mappings
 nnoremap <F3> :wq<CR>          " ibm habits die hard
+com! -complete=shellcmd -nargs=+ Shell call RunShellCommand(<q-args>)
+nnoremap <F6> :call GitLogLine()<CR>
+
 noremap gf <C-W>gf             " open file in new tab
 " Clear highlighting with a redraw
 noremap <silent> <C-L> :nohlsearch<CR><C-L>

@@ -118,3 +118,28 @@ function! s:Median(nums)
     return (nums[l/2] + nums[(l/2)-1]) / 2
   endif
 endfunction
+
+function! RunShellCommand(cmdline)
+  echo a:cmdline
+  let exp_line = a:cmdline
+  for part in split(a:cmdline, ' ')
+    if part[0] =~ '\v[%#<]'
+      let exp_part = fnameescape(expand(part))
+      let exp_line = substitute(exp_line, part, exp_part, '')
+    endif
+  endfor
+  botright new
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  call setline(1, 'Input : ' . a:cmdline)
+  call setline(2, 'Expand: ' . exp_line)
+  call setline(3,substitute(getline(2),'.','=','g'))
+  execute '$read !' . exp_line
+  setlocal nomodifiable
+  1
+endfunction
+
+function! GitLogLine()
+  let gitcmd = 'git log -L'.line('.').','.line('.').':'.expand('%')
+  echo gitcmd
+  call RunShellCommand(gitcmd)
+endfunction
