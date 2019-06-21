@@ -117,7 +117,7 @@ nnoremap <space> za
 vnoremap <space> zf
 
 " ========== Tab Completion ==========
-set wildmode=list:longest
+set wildmode=longest:list,full
 set wildmenu                   " allow ctrl+n and ctrl+p for scrolling
 " Set which filetypes to ignore while completing
 set wildignore=*.o,*.obj,*.class,*.pyc
