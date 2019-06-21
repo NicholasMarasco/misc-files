@@ -94,7 +94,7 @@ function! CommentLine()
   nohlsearch
   endfunction
 
-function! UnCommentLine()
+function! UncommentLine()
   execute 'substitute/^' . b:comment_leader . '//e'
   nohlsearch
   endfunction
