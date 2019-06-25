@@ -69,6 +69,8 @@ endtry
 
 " Attempt at arm syntax highlighting
 au BufRead,BufNewFile *.s,*.S set filetype=arm " arm = armv7/7
+" Misc filetype setting
+au BufRead,BufNewFile .aliases set filetype=sh
 
 " ========== Persistent Undo ==========
 " Keep undo across sessions

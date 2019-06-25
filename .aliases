@@ -20,6 +20,7 @@ alias :Q=':q'
 alias :Q!=':q!'
 alias vi='vi -p'
 alias tmux='tmux -2'
+alias sandbox='cd ~/Documents/projects/sandbox ; source Scripts/activate'
 
 # Java aliases
 alias jcompa='javac *.java'
