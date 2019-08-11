@@ -1,5 +1,6 @@
 # Bring in aliases
 source ~/.aliases
+source /etc/bash_completion.d/git-prompt
 
 export set EDITOR='vi'
 export set VISUAL="$EDITOR"

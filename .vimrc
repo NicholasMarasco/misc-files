@@ -5,6 +5,9 @@ set nocompatible
 " ========== Pathogen ==========
 try
   execute pathogen#infect()
+  let b:pathogen_exists = 1
+catch /.*/
+  let b:pathogen_exists = 0
 endtry
 
 " ========== Vundle (Eventually) ==========
