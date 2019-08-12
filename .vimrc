@@ -50,6 +50,19 @@ let mapleader=","              " more easily accessible leader
 " outsourced to a file because it was large and unsightly
 if filereadable(expand("~/.vim/.vimsline"))
   source ~/.vim/.vimsline
+else
+  " Show EOL type and last modified timestamp, right after the filename
+  " Set the statusline
+  set statusline=%f               " filename relative to current $PWD
+  set statusline+=%h              " help file flag
+  set statusline+=%m              " modified flag
+  set statusline+=%r              " readonly flag
+  set statusline+=\ [%{&ff}]      " Fileformat [unix]/[dos] etc...
+  " last modified timestamp
+  set statusline+=\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})
+  set statusline+=%=              " Rest: right align
+  set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtual column
+  set statusline+=\ %P            " Position in buffer: Percentage
 endif
 autocmd BufNewFile,BufRead .vimsline set filetype=vim
 
