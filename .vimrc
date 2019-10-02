@@ -45,6 +45,7 @@ set formatoptions-=o           " don't continue comments on pushing /O
 set nostartofline              " don't jump to column 0 when possible
 
 let mapleader=","              " more easily accessible leader
+nnoremap <Leader>l /\v%>75v.+<CR>
 
 " ========== Status Line Config ==========
 " outsourced to a file because it was large and unsightly
@@ -124,7 +125,7 @@ set list listchars=tab:▷·,trail:·,nbsp:·
 
 set nowrap                     " don't hard wrap lines
 set linebreak                  " wrap lines at convenient places
-set textwidth=71               " specificaly around this width
+set textwidth=75               " specificaly around this width
 
 " ========== Folding ==========
 set foldmethod=indent          " fold based on indentation
